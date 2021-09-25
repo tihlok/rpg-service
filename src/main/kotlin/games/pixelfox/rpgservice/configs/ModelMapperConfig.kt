@@ -23,8 +23,5 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class ModelMapperConfig {
     @Bean
-    fun modelMapper(): ModelMapper {
-        val modelMapper: ModelMapper = ModelMapper()
-        return modelMapper
-    }
+    fun modelMapper() = ModelMapper()
 }

@@ -14,10 +14,11 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.player
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.builders.PlayerResourceBuilder
-import games.pixelfox.rpgservice.exceptions.PlayerNotFoundException
+import games.pixelfox.rpgservice.builders.ItemResourceBuilder
+import games.pixelfox.rpgservice.exceptions.ItemMissingPropertiesException
+import games.pixelfox.rpgservice.exceptions.ItemNotFoundException
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -26,43 +27,80 @@ import org.springframework.boot.test.context.SpringBootTest
 import java.util.*
 
 @SpringBootTest
-class PlayerServiceTests {
+class ItemServiceTests {
     @Autowired
-    private val playerService: PlayerService? = null
+    private val itemService: ItemService? = null
 
     @Test
-    fun createOnePlayer() {
-        val player = PlayerResourceBuilder.aPlayerResource()
+    fun createOneItem() {
+        val item = ItemResourceBuilder.anItemResource()
             .withNoID()
             .withNoDates()
             .build()
 
-        val saved = playerService?.save(player)
+        val saved = itemService?.save(item)
         assertThat(saved).isNotNull
         assertThat(saved?.id).isNotNull
         assertThat(saved?.name).startsWith("name ")
+        assertThat(saved?.slotType).isEqualTo("ARMOR")
+        assertThat(saved?.power).isGreaterThan(0)
+        assertThat(saved?.dropRate).isGreaterThan(0.0)
         assertThat(saved?.createdAt).isNotNull
         assertThat(saved?.updatedAt).isNotNull
         assertThat(saved?.bannedAt).isNull()
     }
 
     @Test
-    fun findOnePlayer() {
-        val resource = playerService?.save(PlayerResourceBuilder.aPlayerResource().empty())
+    fun findOneItem() {
+        val resource = itemService?.save(ItemResourceBuilder.anItemResource().build())
 
-        val find = playerService?.findByID(resource?.id!!)
+        val find = itemService?.findByID(resource?.id!!)
         assertThat(find).isNotNull
         assertThat(find?.id).isNotNull
         assertThat(find?.name).startsWith("name ")
+        assertThat(find?.slotType).isEqualTo("ARMOR")
+        assertThat(find?.power).isGreaterThan(0)
+        assertThat(find?.dropRate).isGreaterThan(0.0)
         assertThat(find?.createdAt).isNotNull
         assertThat(find?.updatedAt).isNotNull
         assertThat(find?.bannedAt).isNull()
     }
 
     @Test
-    fun failsToFindPlayer() {
-        val exception = assertThrows<PlayerNotFoundException> {
-            playerService?.findByID(UUID.randomUUID())
+    fun updateOneItem() {
+        val resource = itemService?.save(ItemResourceBuilder.anItemResource().build())
+        resource?.dropRate = 0.9
+        resource?.slotType = "HEAD"
+
+        itemService?.save(resource!!)
+
+        val find = itemService?.findByID(resource?.id!!)
+        assertThat(find).isNotNull
+        assertThat(find?.id).isNotNull
+        assertThat(find?.name).startsWith("name ")
+        assertThat(find?.slotType).isEqualTo("HEAD")
+        assertThat(find?.power).isGreaterThan(0)
+        assertThat(find?.dropRate).isEqualTo(0.9)
+        assertThat(find?.createdAt).isNotNull
+        assertThat(find?.updatedAt).isNotNull
+        assertThat(find?.bannedAt).isNull()
+    }
+
+    @Test
+    fun failsToUpdateItem() {
+        val resource = itemService?.save(ItemResourceBuilder.anItemResource().build())
+        resource?.slotType = "WRONG SLOT TYPE"
+
+        val exception = assertThrows<ItemMissingPropertiesException> {
+            itemService?.save(resource!!)
+        }
+        assertThat(exception).isNotNull
+    }
+
+    @Test
+    fun failsToFindItem() {
+        val exception = assertThrows<ItemNotFoundException> {
+            itemService?.findByID(UUID.randomUUID())
         }
         assertThat(exception).isNotNull
     }

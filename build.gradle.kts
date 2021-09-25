@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 PixelFox.
+ * Copyright (c) 2021-2021 PixelFox.
  * All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"),
@@ -39,7 +39,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:7.14.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.modelmapper.extensions:modelmapper-spring:2.4.2")
+    implementation("org.modelmapper.extensions:modelmapper-spring:2.4.4")
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.4")
     runtimeOnly("com.h2database:h2:1.4.200")
     runtimeOnly("org.postgresql:postgresql:42.2.23.jre7")

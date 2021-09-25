@@ -14,30 +14,10 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.player
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.exceptions.PlayerNotFoundException
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
+import org.springframework.data.jpa.repository.JpaRepository
 import java.util.*
 
-@Service
-class PlayerServiceImpl : PlayerService {
-    @Autowired
-    private val playerRepository: PlayerRepository? = null
+interface ItemRepository : JpaRepository<Item, UUID>
 
-    @Autowired
-    private val playerResourceAssembler: PlayerResourceAssembler? = null
-
-    override fun save(resource: PlayerResource): PlayerResource {
-        val entity = playerResourceAssembler?.from(resource)!!
-        return playerRepository?.save(entity)
-            .let { playerResourceAssembler.from(it!!) }
-    }
-
-    override fun findByID(id: UUID): PlayerResource {
-        return playerRepository?.findById(id)
-            ?.orElseThrow { PlayerNotFoundException(id) }
-            .let { playerResourceAssembler?.from(it!!)!! }
-    }
-}

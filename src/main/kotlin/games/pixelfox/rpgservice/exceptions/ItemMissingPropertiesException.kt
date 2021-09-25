@@ -14,30 +14,8 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.player
+package games.pixelfox.rpgservice.exceptions
 
-import games.pixelfox.rpgservice.exceptions.PlayerNotFoundException
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
-import java.util.*
+import games.pixelfox.rpgservice.item.ItemResource
 
-@Service
-class PlayerServiceImpl : PlayerService {
-    @Autowired
-    private val playerRepository: PlayerRepository? = null
-
-    @Autowired
-    private val playerResourceAssembler: PlayerResourceAssembler? = null
-
-    override fun save(resource: PlayerResource): PlayerResource {
-        val entity = playerResourceAssembler?.from(resource)!!
-        return playerRepository?.save(entity)
-            .let { playerResourceAssembler.from(it!!) }
-    }
-
-    override fun findByID(id: UUID): PlayerResource {
-        return playerRepository?.findById(id)
-            ?.orElseThrow { PlayerNotFoundException(id) }
-            .let { playerResourceAssembler?.from(it!!)!! }
-    }
-}
+class ItemMissingPropertiesException(val resource: ItemResource) : RuntimeException(resource.toString())

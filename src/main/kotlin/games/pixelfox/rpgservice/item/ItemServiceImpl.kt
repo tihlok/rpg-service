@@ -14,30 +14,36 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.player
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.exceptions.PlayerNotFoundException
+import games.pixelfox.rpgservice.exceptions.ItemMissingPropertiesException
+import games.pixelfox.rpgservice.exceptions.ItemNotFoundException
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PlayerServiceImpl : PlayerService {
+class ItemServiceImpl : ItemService {
     @Autowired
-    private val playerRepository: PlayerRepository? = null
+    private val itemRepository: ItemRepository? = null
 
     @Autowired
-    private val playerResourceAssembler: PlayerResourceAssembler? = null
+    private val itemResourceAssembler: ItemResourceAssembler? = null
 
-    override fun save(resource: PlayerResource): PlayerResource {
-        val entity = playerResourceAssembler?.from(resource)!!
-        return playerRepository?.save(entity)
-            .let { playerResourceAssembler.from(it!!) }
+    override fun save(resource: ItemResource): ItemResource {
+        val entity = itemResourceAssembler?.from(resource)!!
+        return try {
+            itemRepository?.save(entity)
+                .let { itemResourceAssembler.from(it!!) }
+        } catch (e: DataIntegrityViolationException) {
+            throw ItemMissingPropertiesException(resource)
+        }
     }
 
-    override fun findByID(id: UUID): PlayerResource {
-        return playerRepository?.findById(id)
-            ?.orElseThrow { PlayerNotFoundException(id) }
-            .let { playerResourceAssembler?.from(it!!)!! }
+    override fun findByID(id: UUID): ItemResource {
+        return itemRepository?.findById(id)
+            ?.orElseThrow { ItemNotFoundException(id) }
+            .let { itemResourceAssembler?.from(it!!)!! }
     }
 }
