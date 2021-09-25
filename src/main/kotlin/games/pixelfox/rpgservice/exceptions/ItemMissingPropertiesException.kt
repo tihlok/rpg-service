@@ -18,4 +18,4 @@ package games.pixelfox.rpgservice.exceptions
 
 import games.pixelfox.rpgservice.item.ItemResource
 
-class ItemMissingPropertiesException(val resource: ItemResource) : RuntimeException(resource.toString())
+class ItemMissingPropertiesException(val resource: ItemResource) : RuntimeException("Missing Properties: [$resource]")

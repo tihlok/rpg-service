@@ -1,0 +1,30 @@
+name: Coverage
+
+on:
+  push:
+    branches: [ main , feature/rpg-0-creating-project ]
+  #    paths: [ '**.java', '.github/workflows/build.yml' ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Tests
+        run: SPRING_PROFILES_ACTIVE=test ./gradlew test jacocoTestReport
+
+      - name: Log Coverage
+        run: |
+          echo "coverage = ${{ steps.jacoco.outputs.coverage }}"
+          echo "branches = ${{ steps.jacoco.outputs.branches }}"
+
+      - name: Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          verbose: true

@@ -30,14 +30,13 @@ class PlayerServiceImpl : PlayerService {
     private val playerResourceAssembler: PlayerResourceAssembler? = null
 
     override fun save(resource: PlayerResource): PlayerResource {
-        val entity = playerResourceAssembler?.from(resource)!!
-        return playerRepository?.save(entity)
-            .let { playerResourceAssembler.from(it!!) }
+        val entity = playerResourceAssembler!!.from(resource)
+        return playerRepository!!.save(entity)
+            .let { playerResourceAssembler.from(it) }
     }
 
-    override fun findByID(id: UUID): PlayerResource {
-        return playerRepository?.findById(id)
-            ?.orElseThrow { PlayerNotFoundException(id) }
+    override fun findByID(id: UUID): PlayerResource =
+        playerRepository!!.findById(id)
+            .orElseThrow { PlayerNotFoundException(id) }
             .let { playerResourceAssembler?.from(it!!)!! }
-    }
 }

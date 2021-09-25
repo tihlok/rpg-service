@@ -60,6 +60,27 @@ class PlayerServiceTests {
     }
 
     @Test
+    fun updateOneItem() {
+        val resource = playerService?.save(PlayerResourceBuilder.aPlayerResource().build())
+        resource?.name = "Player V2"
+
+        val updated = playerService?.save(resource!!)
+        assertThat(updated).isNotNull
+        assertThat(updated?.createdAt).isEqualTo(resource?.createdAt)
+        assertThat(updated?.updatedAt).isAfter(resource?.updatedAt)
+
+        val find = playerService?.findByID(resource?.id!!)
+        assertThat(find).isNotNull
+        assertThat(find?.id).isNotNull
+        assertThat(find?.name).startsWith("Player V2")
+        assertThat(find?.username).startsWith("@username_")
+        assertThat(find?.email).startsWith("test@")
+        assertThat(find?.createdAt).isNotNull
+        assertThat(find?.updatedAt).isNotNull
+        assertThat(find?.bannedAt).isNull()
+    }
+
+    @Test
     fun failsToFindPlayer() {
         val exception = assertThrows<PlayerNotFoundException> {
             playerService?.findByID(UUID.randomUUID())

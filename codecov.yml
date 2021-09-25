@@ -1,0 +1,2 @@
+ignore:
+  - "src/main/kotlin/games/pixelfox/rpgservice/RpgServiceApplication.kt"

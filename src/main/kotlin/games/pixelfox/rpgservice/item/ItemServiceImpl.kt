@@ -31,19 +31,17 @@ class ItemServiceImpl : ItemService {
     @Autowired
     private val itemResourceAssembler: ItemResourceAssembler? = null
 
-    override fun save(resource: ItemResource): ItemResource {
-        val entity = itemResourceAssembler?.from(resource)!!
-        return try {
-            itemRepository?.save(entity)
-                .let { itemResourceAssembler.from(it!!) }
+    override fun save(resource: ItemResource): ItemResource =
+        try {
+            val entity = itemResourceAssembler!!.from(resource)
+            itemRepository!!.save(entity)
+                .let { itemResourceAssembler.from(it) }
         } catch (e: DataIntegrityViolationException) {
             throw ItemMissingPropertiesException(resource)
         }
-    }
 
-    override fun findByID(id: UUID): ItemResource {
-        return itemRepository?.findById(id)
-            ?.orElseThrow { ItemNotFoundException(id) }
+    override fun findByID(id: UUID): ItemResource =
+        itemRepository!!.findById(id)
+            .orElseThrow { ItemNotFoundException(id) }
             .let { itemResourceAssembler?.from(it!!)!! }
-    }
 }

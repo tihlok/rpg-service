@@ -72,7 +72,10 @@ class ItemServiceTests {
         resource?.dropRate = 0.9
         resource?.slotType = "HEAD"
 
-        itemService?.save(resource!!)
+        val updated = itemService?.save(resource!!)
+        assertThat(updated).isNotNull
+        assertThat(updated?.createdAt).isEqualTo(resource?.createdAt)
+        assertThat(updated?.updatedAt).isAfter(resource?.updatedAt)
 
         val find = itemService?.findByID(resource?.id!!)
         assertThat(find).isNotNull
@@ -95,13 +98,18 @@ class ItemServiceTests {
             itemService?.save(resource!!)
         }
         assertThat(exception).isNotNull
+        assertThat(exception.resource).isEqualTo(resource)
+        assertThat(exception.message).isEqualTo("Missing Properties: [$resource]")
     }
 
     @Test
     fun failsToFindItem() {
+        val id = UUID.randomUUID()
         val exception = assertThrows<ItemNotFoundException> {
-            itemService?.findByID(UUID.randomUUID())
+            itemService?.findByID(id)
         }
         assertThat(exception).isNotNull
+        assertThat(exception.id).isEqualTo(id)
+        assertThat(exception.message).isEqualTo("Item Not Found: [$id]")
     }
 }

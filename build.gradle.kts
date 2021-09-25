@@ -22,6 +22,7 @@ plugins {
     kotlin("jvm") version "1.5.21"
     kotlin("plugin.spring") version "1.5.21"
     kotlin("plugin.jpa") version "1.5.21"
+    jacoco
 }
 
 group = "games.pixelfox"
@@ -40,9 +41,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.modelmapper.extensions:modelmapper-spring:2.4.4")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools:2.5.4")
+
     runtimeOnly("com.h2database:h2:1.4.200")
     runtimeOnly("org.postgresql:postgresql:42.2.23.jre7")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.5.4")
 }
 
@@ -55,4 +59,15 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    reports {
+        csv.required.set(true)
+        xml.required.set(true)
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestReport)
 }
