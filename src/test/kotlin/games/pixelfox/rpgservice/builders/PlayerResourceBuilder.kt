@@ -18,22 +18,25 @@ package games.pixelfox.rpgservice.builders
 
 import games.pixelfox.rpgservice.player.PlayerResource
 
-class PlayerResourceBuilder private constructor() : PlayerAbstractBuilder<PlayerResource>() {
+class PlayerResourceBuilder private constructor() : AbstractBuilder<PlayerResource>() {
     fun empty(): PlayerResource = PlayerResource(
         name = name,
         email = email,
         username = username
     )
 
-    override fun build(): PlayerResource = PlayerResource(
-        id = id,
-        name = name,
-        email = email,
-        username = username,
-        createdAt = createdAt,
-        updatedAt = updatedAt,
-        bannedAt = bannedAt
-    )
+    override fun build(): PlayerResource {
+        val resource = PlayerResource(
+            name = name,
+            email = email,
+            username = username,
+        )
+        resource.id = id
+        resource.createdAt = createdAt
+        resource.updatedAt = updatedAt
+        resource.bannedAt = bannedAt
+        return resource
+    }
 
     companion object {
         fun aPlayerResource(): PlayerResourceBuilder {

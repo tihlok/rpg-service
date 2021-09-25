@@ -19,7 +19,6 @@ package games.pixelfox.rpgservice.player
 import games.pixelfox.rpgservice.builders.PlayerBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.Instant
 import java.util.*
 
 class PlayerTests {
@@ -35,28 +34,23 @@ class PlayerTests {
 
     @Test
     fun createANewPlayerWithAllFields() {
-        val uuid = UUID.randomUUID()
-        val now = Instant.now()
-        val player = Player(
-            id = uuid,
-            name = "Tiago",
-            createdAt = now,
-            updatedAt = now,
-            bannedAt = now
-        )
+        val player = PlayerBuilder.aPlayer().build()
 
-        assertThat(player.id).isEqualTo(uuid)
-        assertThat(player.name).isEqualTo("Tiago")
-        assertThat(player.createdAt).isEqualTo(now)
-        assertThat(player.updatedAt).isEqualTo(now)
-        assertThat(player.bannedAt).isEqualTo(now)
+        assertThat(player.id).isNotNull
+        assertThat(player.name).startsWith("name ")
+        assertThat(player.createdAt).isNotNull
+        assertThat(player.updatedAt).isNotNull
+        assertThat(player.bannedAt).isNull()
     }
 
     @Test
     fun playersShouldBeEquals() {
-        val uuid = UUID.randomUUID()
-        val playerOne = Player(id = uuid, name = "Tiago")
-        val playerTwo = Player(id = uuid, name = "Tiago")
+        val playerOne = Player()
+        playerOne.id = UUID.fromString("00000000-0000-0000-0000-000000000000")
+
+        val playerTwo = Player()
+        playerTwo.id = UUID.fromString("00000000-0000-0000-0000-000000000000")
+
         assertThat(playerOne).isEqualTo(playerTwo)
     }
 
@@ -69,14 +63,15 @@ class PlayerTests {
 
     @Test
     fun playerString() {
-        val uuid = UUID.fromString("00000000-0000-0000-0000-000000000000")
-        val player = Player(id = uuid, name = "Tiago", email = "strife.tiago@gmail.com", username = "tihlok")
-        assertThat(player).asString().isEqualTo("Player(id=00000000-0000-0000-0000-000000000000,name=Tiago,email=strife.tiago@gmail.com,username=tihlok)")
+        val player = Player(name = "Tiago", email = "strife.tiago@gmail.com", username = "tihlok")
+        player.id = UUID.fromString("00000000-0000-0000-0000-000000000000")
+
+        assertThat(player).asString().isEqualTo("Player(id=00000000-0000-0000-0000-000000000000,name=Tiago,email=strife.tiago@gmail.com,username=tihlok,createdAt=null,updatedAt=null,bannedAt=null)")
     }
 
     @Test
     fun playerHashCode() {
         val player = PlayerBuilder.aPlayer().build()
-        assertThat(player.hashCode()).isEqualTo(0)
+        assertThat(player.hashCode()).isNotNull
     }
 }

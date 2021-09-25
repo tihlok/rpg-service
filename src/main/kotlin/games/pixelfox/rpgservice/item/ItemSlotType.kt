@@ -14,27 +14,10 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.player.Player
-
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
-
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
-    }
+enum class ItemSlotType {
+    HAND,
+    HEAD,
+    ARMOR
 }

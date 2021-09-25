@@ -14,27 +14,20 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.hellpers
 
-import games.pixelfox.rpgservice.player.Player
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
+import java.time.Instant
+import java.util.*
+import javax.persistence.GeneratedValue
+import javax.persistence.Id
+import javax.persistence.MappedSuperclass
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
-
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
-    }
-}
+@MappedSuperclass
+abstract class EntityModel(
+    @Id @GeneratedValue var id: UUID? = null,
+    @field:CreationTimestamp var createdAt: Instant? = null,
+    @field:UpdateTimestamp var updatedAt: Instant? = null,
+    var bannedAt: Instant? = null
+)

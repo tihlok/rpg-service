@@ -16,25 +16,27 @@
 
 package games.pixelfox.rpgservice.builders
 
-import games.pixelfox.rpgservice.player.Player
+import games.pixelfox.rpgservice.item.Item
+import games.pixelfox.rpgservice.item.ItemSlotType
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
+class ItemBuilder private constructor() : AbstractBuilder<Item>() {
+    override fun build(): Item {
+        val item = Item(
             name = name,
-            email = email,
-            username = username,
+            power = randomLong,
+            slotType = ItemSlotType.ARMOR,
+            dropRate = randomDouble,
         )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
+        item.id = id
+        item.createdAt = createdAt
+        item.updatedAt = updatedAt
+        item.bannedAt = bannedAt
+        return item
     }
 
     companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
+        fun anItem(): ItemBuilder {
+            return ItemBuilder()
         }
     }
 }

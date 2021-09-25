@@ -14,45 +14,47 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.player
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.builders.PlayerBuilder
-import games.pixelfox.rpgservice.builders.PlayerResourceBuilder
+import games.pixelfox.rpgservice.builders.ItemBuilder
+import games.pixelfox.rpgservice.builders.ItemResourceBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class PlayerResourceAssemblerTests {
+class ItemResourceAssemblerTests {
     @Autowired
-    private val playerResourceAssembler: PlayerResourceAssembler? = null
+    private val itemResourceAssembler: ItemResourceAssembler? = null
 
     @Test
     fun entityToResource() {
-        val entity = PlayerBuilder.aPlayer().build()
-        val resource = playerResourceAssembler?.from(entity)
+        val entity = ItemBuilder.anItem().build()
+        val resource = itemResourceAssembler?.from(entity)
 
         assertThat(resource?.id).isEqualTo(entity.id)
         assertThat(resource?.name).isEqualTo(entity.name)
-        assertThat(resource?.email).isEqualTo(entity.email)
-        assertThat(resource?.username).isEqualTo(entity.username)
+        assertThat(resource?.slotType).isEqualTo(entity.slotType.toString())
+        assertThat(resource?.power).isEqualTo(entity.power)
+        assertThat(resource?.dropRate).isEqualTo(entity.dropRate)
         assertThat(resource?.createdAt).isEqualTo(entity.createdAt)
         assertThat(resource?.updatedAt).isEqualTo(entity.updatedAt)
         assertThat(resource?.bannedAt).isEqualTo(entity.bannedAt)
     }
 
     @Test
-    fun resourceAllFieldsToEntity() {
-        val resource = PlayerResourceBuilder.aPlayerResource().build()
-        val entity = playerResourceAssembler?.from(resource)
+    fun resourceBlankToEntity() {
+        val resource = ItemResourceBuilder.anItemResource().build()
+        val entity = itemResourceAssembler?.from(resource)
 
-        assertThat(entity?.id).isEqualTo(resource.id)
+        assertThat(entity?.id).isNotNull
         assertThat(entity?.name).isEqualTo(resource.name)
-        assertThat(entity?.email).isEqualTo(resource.email)
-        assertThat(entity?.username).isEqualTo(resource.username)
-        assertThat(entity?.createdAt).isEqualTo(resource.createdAt)
-        assertThat(entity?.updatedAt).isEqualTo(resource.updatedAt)
-        assertThat(entity?.bannedAt).isEqualTo(resource.bannedAt)
+        assertThat(entity?.slotType).asString().isEqualTo(resource.slotType)
+        assertThat(entity?.power).isEqualTo(resource.power)
+        assertThat(entity?.dropRate).isEqualTo(resource.dropRate)
+        assertThat(entity?.createdAt).isNotNull
+        assertThat(entity?.updatedAt).isNotNull
+        assertThat(entity?.bannedAt).isNull()
     }
 }

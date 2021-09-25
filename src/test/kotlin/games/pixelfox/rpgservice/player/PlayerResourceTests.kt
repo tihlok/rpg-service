@@ -16,10 +16,9 @@
 
 package games.pixelfox.rpgservice.player
 
+import games.pixelfox.rpgservice.builders.PlayerResourceBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.time.Instant
-import java.util.*
 
 class PlayerResourceTests {
     @Test
@@ -27,6 +26,8 @@ class PlayerResourceTests {
         val player = PlayerResource()
         assertThat(player.id).isNull()
         assertThat(player.name).isNull()
+        assertThat(player.email).isNull()
+        assertThat(player.username).isNull()
         assertThat(player.createdAt).isNull()
         assertThat(player.updatedAt).isNull()
         assertThat(player.bannedAt).isNull()
@@ -34,20 +35,14 @@ class PlayerResourceTests {
 
     @Test
     fun createANewPlayerResourceWithAllFields() {
-        val uuid = UUID.randomUUID()
-        val now = Instant.now()
-        val player = PlayerResource(
-            id = uuid,
-            name = "Tiago",
-            createdAt = now,
-            updatedAt = now,
-            bannedAt = now
-        )
+        val player = PlayerResourceBuilder.aPlayerResource().build()
 
-        assertThat(player.id).isEqualTo(uuid)
-        assertThat(player.name).isEqualTo("Tiago")
-        assertThat(player.createdAt).isEqualTo(now)
-        assertThat(player.updatedAt).isEqualTo(now)
-        assertThat(player.bannedAt).isEqualTo(now)
+        assertThat(player.id).isNotNull
+        assertThat(player.name).startsWith("name ")
+        assertThat(player.username).startsWith("@username_")
+        assertThat(player.email).startsWith("test@")
+        assertThat(player.createdAt).isNotNull
+        assertThat(player.updatedAt).isNotNull
+        assertThat(player.bannedAt).isNull()
     }
 }

@@ -25,9 +25,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 @DataJpaTest
 class PlayerRepositoryTests {
     companion object {
-        private val PLAYER_TIAGO = PlayerBuilder
+        private val PLAYER = PlayerBuilder
             .aPlayer()
-            .withName("Tiago")
             .build()
     }
 
@@ -47,10 +46,10 @@ class PlayerRepositoryTests {
 
     @Test
     fun createANewPlayerAndSave() {
-        val saved = playerRepository?.save(PLAYER_TIAGO)
+        val saved = playerRepository?.save(PLAYER)
         assertThat(saved).isNotNull
-        assertThat(saved?.name).isEqualTo("Tiago")
-        assertThat(saved?.id).isEqualTo(PLAYER_TIAGO.id)
+        assertThat(saved?.id).isNotNull
+        assertThat(saved?.name).startsWith("name ")
         assertThat(saved?.createdAt).isNotNull
         assertThat(saved?.updatedAt).isNotNull
         assertThat(saved?.bannedAt).isNull()
@@ -60,13 +59,13 @@ class PlayerRepositoryTests {
     fun createANewPlayerAndSaveAndGet() {
         assertThat(playerRepository?.findAll()).hasSize(0)
 
-        val saved = playerRepository?.save(PLAYER_TIAGO)
+        val saved = playerRepository?.save(PLAYER)
         assertThat(saved).isNotNull
 
         val allAfterSave = playerRepository?.findAll()
         assertThat(allAfterSave).hasSize(1)
 
-        val player = playerRepository?.findById(PLAYER_TIAGO.id!!)?.get()
+        val player = playerRepository?.findById(saved?.id!!)?.get()
         assertThat(allAfterSave?.get(0)).isEqualTo(player)
     }
 
@@ -79,21 +78,21 @@ class PlayerRepositoryTests {
 
     @Test
     fun updateOnePlayer() {
-        val saved = playerRepository?.save(PLAYER_TIAGO)!!
+        val saved = playerRepository?.save(PLAYER)!!
         assertThat(saved).isNotNull
-        assertThat(saved.name).isEqualTo("Tiago")
+        assertThat(saved.name).startsWith("name ")
 
-        saved.name = "Tiago V2"
+        saved.name = "PLAYER v2"
         val updated = playerRepository.save(saved)
         assertThat(updated).isNotNull
-        assertThat(updated.name).isEqualTo("Tiago V2")
+        assertThat(updated.name).isEqualTo("PLAYER v2")
     }
 
     @Test
     fun deleteOnePlayer() {
         assertThat(playerRepository?.findAll()).hasSize(0)
 
-        val saved = playerRepository?.save(PLAYER_TIAGO)!!
+        val saved = playerRepository?.save(PLAYER)!!
         assertThat(playerRepository.findAll()).hasSize(1)
 
         playerRepository.delete(saved)

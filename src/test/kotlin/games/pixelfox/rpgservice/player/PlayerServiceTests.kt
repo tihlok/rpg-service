@@ -37,7 +37,7 @@ class PlayerServiceTests {
         val saved = playerService?.save(player)
         assertThat(saved).isNotNull
         assertThat(saved?.id).isNotNull
-        assertThat(saved?.name).startsWith("TEST PLAYER - ")
+        assertThat(saved?.name).startsWith("name ")
         assertThat(saved?.createdAt).isNotNull
         assertThat(saved?.updatedAt).isNotNull
         assertThat(saved?.bannedAt).isNull()
@@ -50,7 +50,7 @@ class PlayerServiceTests {
         val find = playerService?.findByID(resource?.id!!)
         assertThat(find).isNotNull
         assertThat(find?.id).isNotNull
-        assertThat(find?.name).startsWith("TEST PLAYER - ")
+        assertThat(find?.name).startsWith("name ")
         assertThat(find?.createdAt).isNotNull
         assertThat(find?.updatedAt).isNotNull
         assertThat(find?.bannedAt).isNull()

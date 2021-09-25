@@ -14,27 +14,41 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.player.Player
+import games.pixelfox.rpgservice.hellpers.EntityModel
+import org.hibernate.Hibernate
+import javax.persistence.Entity
+import javax.persistence.Table
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
+@Entity
+@Table(name = "items")
+data class Item(
+    var name: String? = null,
+    var slotType: ItemSlotType? = null,
+    var power: Long? = null,
+    var dropRate: Double? = null
+) : EntityModel() {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
+        other as Item
+        return id != null && id == other.id
     }
 
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
+    override fun hashCode(): Int = id.hashCode()
+
+    @Override
+    override fun toString(): String {
+        return this::class.simpleName + "(" +
+                "id=$id," +
+                "name=$name," +
+                "slotType=$slotType," +
+                "power=$power," +
+                "dropRate=$dropRate," +
+                "createdAt=$createdAt," +
+                "updatedAt=$updatedAt," +
+                "bannedAt=$bannedAt" +
+                ")"
     }
 }

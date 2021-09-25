@@ -14,27 +14,13 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.player.Player
+import games.pixelfox.rpgservice.hellpers.ResourceModel
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
-
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
-    }
-}
+data class ItemResource(
+    var name: String? = null,
+    var slotType: String? = null,
+    var power: Long? = null,
+    var dropRate: Double? = null,
+) : ResourceModel()

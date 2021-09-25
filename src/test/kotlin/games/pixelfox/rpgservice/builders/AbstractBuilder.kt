@@ -16,25 +16,43 @@
 
 package games.pixelfox.rpgservice.builders
 
-import games.pixelfox.rpgservice.player.Player
+import java.time.Instant
+import java.util.*
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
+abstract class AbstractBuilder<T> {
+    protected var id: UUID? = UUID.randomUUID()
+    protected var name = "name $id"
+    protected var email = "test@$id.com"
+    protected var username = "@username_$id"
+    protected var createdAt: Instant? = now
+    protected var updatedAt: Instant? = now
+    protected var bannedAt: Instant? = null
+
+    protected val randomLong: Long
+        get() = (randomDouble * 10000).toLong()
+
+    protected val randomDouble: Double
+        get() = Math.random()
+
+    protected val now: Instant
+        get() = Instant.now()
+
+    fun withName(name: String): AbstractBuilder<T> {
+        this.name = name
+        return this
     }
 
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
+    fun withNoID(): AbstractBuilder<T> {
+        this.id = null
+        return this
     }
+
+    fun withNoDates(): AbstractBuilder<T> {
+        this.createdAt = null
+        this.updatedAt = null
+        this.bannedAt = null
+        return this
+    }
+
+    abstract fun build(): T
 }

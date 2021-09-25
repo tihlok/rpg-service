@@ -14,27 +14,29 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+DROP TABLE IF EXISTS players;
+CREATE TABLE players
+(
+    id         UUID                    NOT NULL,
+    name       VARCHAR                 NOT NULL,
+    email      VARCHAR                 NOT NULL,
+    username   VARCHAR                 NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    banned_at  TIMESTAMP DEFAULT NULL,
+    PRIMARY KEY (id)
+);
 
-import games.pixelfox.rpgservice.player.Player
-
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
-
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
-    }
-}
+DROP TABLE IF EXISTS items;
+CREATE TABLE items
+(
+    id         UUID                    NOT NULL,
+    name       VARCHAR                 NOT NULL,
+    power      NUMERIC                 NOT NULL,
+    drop_rate  DECIMAL                 NOT NULL,
+    slot_type  VARCHAR                 NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    updated_at TIMESTAMP DEFAULT NOW() NOT NULL,
+    banned_at  TIMESTAMP DEFAULT NULL,
+    PRIMARY KEY (id)
+);

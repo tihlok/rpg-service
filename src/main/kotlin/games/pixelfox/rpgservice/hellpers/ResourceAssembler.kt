@@ -14,27 +14,19 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.hellpers
 
-import games.pixelfox.rpgservice.player.Player
+import org.modelmapper.ModelMapper
+import org.springframework.beans.factory.annotation.Autowired
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
+open class ResourceAssembler<E : EntityModel, R : ResourceModel>(
+    private val e: () -> E,
+    private val r: () -> R
+) {
+    @Autowired
+    private val mapper: ModelMapper? = null
 
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
-    }
+    fun from(entity: E = e()): R = mapper?.map(entity, r()::class.java)!!
+
+    fun from(resource: R = r()): E = mapper?.map(resource, e()::class.java)!!
 }

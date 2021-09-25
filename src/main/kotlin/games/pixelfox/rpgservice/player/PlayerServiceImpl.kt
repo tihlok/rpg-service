@@ -40,7 +40,7 @@ class PlayerServiceImpl : PlayerService {
         return playerRepository?.findById(id)
             ?.orElseThrow()
             .let {
-                playerResourceAssembler?.from(it)!!
+                playerResourceAssembler?.from(it!!)!!
             }
     }
 }

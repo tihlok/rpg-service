@@ -14,27 +14,17 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.configs
 
-import games.pixelfox.rpgservice.player.Player
+import org.modelmapper.ModelMapper
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
-    }
-
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
+@Configuration
+class ModelMapperConfig {
+    @Bean
+    fun modelMapper(): ModelMapper {
+        val modelMapper: ModelMapper = ModelMapper()
+        return modelMapper
     }
 }

@@ -14,35 +14,16 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.hellpers
 
 import java.time.Instant
 import java.util.*
+import javax.persistence.MappedSuperclass
 
-abstract class PlayerAbstractBuilder<T> {
-    protected var id: UUID? = UUID.randomUUID()
-    protected var name = "TEST PLAYER - $id"
-    protected var email = "test.player@$id.com"
-    protected var username = "@player_$id"
-    protected var createdAt: Instant? = Instant.now()
-    protected var updatedAt: Instant? = Instant.now()
-    protected var bannedAt: Instant? = null
-
-    fun withName(name: String): PlayerAbstractBuilder<T> {
-        this.name = name
-        return this
-    }
-
-    fun withNoID(): PlayerAbstractBuilder<T> {
-        this.id = null
-        return this
-    }
-
-    fun withNoDates(): PlayerAbstractBuilder<T> {
-        this.createdAt = null
-        this.updatedAt = null
-        return this
-    }
-
-    abstract fun build(): T
+@MappedSuperclass
+abstract class ResourceModel {
+    var id: UUID? = null
+    var createdAt: Instant? = null
+    var updatedAt: Instant? = null
+    var bannedAt: Instant? = null
 }

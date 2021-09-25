@@ -14,27 +14,37 @@
  * IN THE SOFTWARE.
  */
 
-package games.pixelfox.rpgservice.builders
+package games.pixelfox.rpgservice.item
 
-import games.pixelfox.rpgservice.player.Player
+import games.pixelfox.rpgservice.builders.ItemResourceBuilder
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 
-class PlayerBuilder private constructor() : AbstractBuilder<Player>() {
-    override fun build(): Player {
-        val player = Player(
-            name = name,
-            email = email,
-            username = username,
-        )
-        player.id = id
-        player.createdAt = createdAt
-        player.updatedAt = updatedAt
-        player.bannedAt = bannedAt
-        return player
+class ItemResourceTests {
+    @Test
+    fun createANewItemResourceWithEmptyFields() {
+        val item = ItemResource()
+        assertThat(item.id).isNull()
+        assertThat(item.name).isNull()
+        assertThat(item.slotType).isNull()
+        assertThat(item.power).isNull()
+        assertThat(item.dropRate).isNull()
+        assertThat(item.createdAt).isNull()
+        assertThat(item.updatedAt).isNull()
+        assertThat(item.bannedAt).isNull()
     }
 
-    companion object {
-        fun aPlayer(): PlayerBuilder {
-            return PlayerBuilder()
-        }
+    @Test
+    fun createANewItemResourceWithAllFields() {
+        val item = ItemResourceBuilder.anItemResource().build()
+
+        assertThat(item.id).isNotNull
+        assertThat(item.name).startsWith("name ")
+        assertThat(item.slotType).isEqualTo("ARMOR")
+        assertThat(item.power).isGreaterThan(0)
+        assertThat(item.dropRate).isGreaterThan(0.0)
+        assertThat(item.createdAt).isNotNull
+        assertThat(item.updatedAt).isNotNull
+        assertThat(item.bannedAt).isNull()
     }
 }
