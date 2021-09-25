@@ -38,5 +38,5 @@ class PlayerServiceImpl : PlayerService {
     override fun findByID(id: UUID): PlayerResource =
         playerRepository!!.findById(id)
             .orElseThrow { PlayerNotFoundException(id) }
-            .let { playerResourceAssembler?.from(it!!)!! }
+            .let { playerResourceAssembler!!.from(it!!) }
 }

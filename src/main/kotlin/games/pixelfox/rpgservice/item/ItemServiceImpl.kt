@@ -43,5 +43,5 @@ class ItemServiceImpl : ItemService {
     override fun findByID(id: UUID): ItemResource =
         itemRepository!!.findById(id)
             .orElseThrow { ItemNotFoundException(id) }
-            .let { itemResourceAssembler?.from(it!!)!! }
+            .let { itemResourceAssembler!!.from(it!!) }
 }

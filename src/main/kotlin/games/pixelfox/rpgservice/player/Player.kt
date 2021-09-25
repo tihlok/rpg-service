@@ -17,7 +17,6 @@
 package games.pixelfox.rpgservice.player
 
 import games.pixelfox.rpgservice.hellpers.EntityModel
-import org.hibernate.Hibernate
 import javax.persistence.Entity
 import javax.persistence.Table
 
@@ -29,13 +28,11 @@ data class Player(
     var username: String? = null
 ) : EntityModel() {
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
         other as Player
         return id != null && id == other.id
     }
 
-    override fun hashCode(): Int = id.hashCode()
+    override fun hashCode() = id.hashCode()
 
     @Override
     override fun toString(): String {
