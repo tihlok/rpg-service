@@ -1,2 +1,11 @@
+coverage:
+  precision: 2
+  round: down
+  range: "70...100"
+
+comment:
+  layout: "header, diff, changes, tree"
+  behavior: default
+
 ignore:
   - "src/main/kotlin/games/pixelfox/rpgservice/RpgServiceApplication.kt"
