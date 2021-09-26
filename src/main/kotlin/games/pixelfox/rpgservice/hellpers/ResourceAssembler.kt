@@ -26,7 +26,7 @@ open class ResourceAssembler<E : EntityModel, R : ResourceModel>(
     @Autowired
     private val mapper: ModelMapper? = null
 
-    fun from(entity: E = e()): R = mapper?.map(entity, r()::class.java)!!
+    fun from(entity: E = e()): R = mapper!!.map(entity, r()::class.java)
 
-    fun from(resource: R = r()): E = mapper?.map(resource, e()::class.java)!!
+    fun from(resource: R = r()): E = mapper!!.map(resource, e()::class.java)
 }
