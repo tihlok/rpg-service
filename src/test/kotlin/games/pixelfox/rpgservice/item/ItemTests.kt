@@ -62,6 +62,9 @@ class ItemTests {
 
     @Test
     fun itemsShouldNoBeEquals() {
+        assertThat(Item()).isNotEqualTo(Item())
+        assertThat(Item().hashCode()).isEqualTo(Item().hashCode())
+
         val itemOne = ItemBuilder.anItem().build()
         val itemTwo = ItemBuilder.anItem().build()
         assertThat(itemOne).isNotEqualTo(itemTwo)
@@ -77,6 +80,6 @@ class ItemTests {
     @Test
     fun itemHashCode() {
         val item = ItemBuilder.anItem().build()
-        assertThat(item.hashCode()).isNotNull
+        assertThat(item.hashCode()).isNotEqualTo(0)
     }
 }

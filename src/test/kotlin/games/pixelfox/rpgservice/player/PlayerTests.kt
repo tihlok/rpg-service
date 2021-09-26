@@ -56,6 +56,9 @@ class PlayerTests {
 
     @Test
     fun playersShouldNoBeEquals() {
+        assertThat(Player()).isNotEqualTo(Player())
+        assertThat(Player().hashCode()).isEqualTo(Player().hashCode())
+
         val playerOne = PlayerBuilder.aPlayer().build()
         val playerTwo = PlayerBuilder.aPlayer().build()
         assertThat(playerOne).isNotEqualTo(playerTwo)
